@@ -23,23 +23,36 @@ func New() *EasyDynamoClient {
 	return &easyClient
 }
 
-func (c EasyDynamoClient) Save(tableObject lambdaconfig.TableInfo) {
+func (c EasyDynamoClient) Save(TableObject lambdaconfig.TableInfo) {
 
-	ProcessTableInfo(tableObject)
+	ProcessTableInfo(TableObject)
 
-	av, err := dynamodbattribute.MarshalMap(tableObject)
+	av, err := dynamodbattribute.MarshalMap(TableObject)
 
 	if err != nil {
 		fmt.Print("this is a shit")
 	}
 	input := &dynamodb.PutItemInput{
 		Item:      av,
-		TableName: aws.String(GetEnvironmentStage() + tableObject.TableName()),
+		TableName: aws.String(GetEnvironmentStage() + TableObject.TableName()),
 	}
 
 	output, err := c.dynamoDbClient.PutItem(input)
 	fmt.Print(output)
 	fmt.Print(err)
+}
+
+func (c EasyDynamoClient) Update(TableObject lambdaconfig.TableInfo) {
+
+	av, err := dynamodbattribute.MarshalMap(TableObject)
+	if err != nil {
+		fmt.Print("this is a shit")
+	}
+	input := &dynamodb.UpdateItemInput{
+		ExpressionAttributeValues: av,
+		TableName:                 aws.String(GetEnvironmentStage() + TableObject.TableName()),
+	}
+	c.dynamoDbClient.UpdateItem(input)
 }
 
 func GetEnvironmentStage() string {

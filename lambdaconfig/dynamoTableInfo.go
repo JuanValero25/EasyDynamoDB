@@ -1,6 +1,8 @@
 package lambdaconfig
 
+import "reflect"
+
 type TableInfo interface {
 	TableName() string
-	CanAddr() bool
+	ReflectedValue() reflect.Value
 }
