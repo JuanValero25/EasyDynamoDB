@@ -1,4 +1,4 @@
 # EasyDynamoDB
-easy framework for DynamoDB in Java
+easy framework for DynamoDB in golang
 
 ## COMMING SOO. . .
