@@ -1,7 +1,11 @@
 package dynamoclient
 
-func NewDynamoClient() {
+import (
+	"github.com/JuanValero25/EasyDynamoDB/lambdaconfig"
+	"github.com/aws/aws-sdk-go/service/dynamodb"
+)
 
-	//	dynamoClient := dynamodb.New(lambdaconfig.GetConfig())
+func NewDynamoClient() *dynamodb.DynamoDB {
 
+	return dynamodb.New(lambdaconfig.GetConfig())
 }
