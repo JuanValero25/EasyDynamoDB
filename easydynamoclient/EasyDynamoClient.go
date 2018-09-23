@@ -26,7 +26,6 @@ func New() *EasyDynamoClient {
 func (c EasyDynamoClient) Save(TableObject lambdaconfig.TableInfo) {
 
 	ProcessTableInfo(TableObject)
-
 	av, err := dynamodbattribute.MarshalMap(TableObject)
 
 	if err != nil {
