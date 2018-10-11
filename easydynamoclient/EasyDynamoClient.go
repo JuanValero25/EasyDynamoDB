@@ -44,8 +44,13 @@ func (c EasyDynamoClient) Save(TableObject lambdaconfig.TableInfo) {
 func (c EasyDynamoClient) Update(TableObject lambdaconfig.TableInfo) {
 
 	input := updateReflectionHelper(TableObject)
+	fmt.Println(input)
+	response,err :=c.dynamoDbClient.UpdateItem(input)
+	fmt.Println(response)
+	fmt.Println(err)
 
-	c.dynamoDbClient.UpdateItem(input)
+
+
 }
 
 func GetEnvironmentStage() string {
