@@ -43,14 +43,8 @@ func (c EasyDynamoClient) Save(TableObject lambdaconfig.TableInfo) {
 
 func (c EasyDynamoClient) Update(TableObject lambdaconfig.TableInfo) {
 
-	av, err := dynamodbattribute.MarshalMap(TableObject)
-	if err != nil {
-		fmt.Print("this is a shit")
-	}
-	input := &dynamodb.UpdateItemInput{
-		ExpressionAttributeValues: av,
-		TableName:                 aws.String(GetEnvironmentStage() + TableObject.TableName()),
-	}
+	input := updateReflectionHelper(TableObject)
+
 	c.dynamoDbClient.UpdateItem(input)
 }
 

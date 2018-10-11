@@ -4,6 +4,11 @@ import (
 	"github.com/JuanValero25/EasyDynamoDB/lambdaconfig"
 	"github.com/satori/go.uuid"
 	"reflect"
+	"fmt"
+	"time"
+	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/service/dynamodb"
 )
 
 func ProcessTableInfo(tableObject lambdaconfig.TableInfo) {
@@ -19,4 +24,38 @@ func ProcessTableInfo(tableObject lambdaconfig.TableInfo) {
 		}
 	}
 
+}
+
+func updateReflectionHelper(tableObject lambdaconfig.TableInfo) *dynamodb.UpdateItemInput {
+
+	start := time.Now()
+	av, _ := dynamodbattribute.MarshalMap(tableObject)
+	fmt.Println(av)
+
+
+
+	t := reflect.TypeOf(tableObject)
+	startSet:="set "
+	for i := 0; i < t.NumField(); i++ {
+		startSet=startSet+t.Field(i).Name+" =: "+t.Field(i).Name+", "
+		if t.Field(i).Type.Kind() == reflect.Struct {
+			fmt.Println(t.Field(i).Type.Name())
+		}
+		fmt.Println(t.Field(i).Type.Kind())
+	}
+
+	startSet = startSet[:len(startSet)-2]
+
+	input := &dynamodb.UpdateItemInput{
+		Key:av,
+		ExpressionAttributeValues: av,
+		UpdateExpression: &startSet,
+		TableName:                 aws.String(GetEnvironmentStage() + tableObject.TableName()),
+	}
+	fmt.Println(startSet)
+
+	elapsed := time.Since(start)
+	fmt.Println("reflections time took", elapsed)
+
+	return input
 }
