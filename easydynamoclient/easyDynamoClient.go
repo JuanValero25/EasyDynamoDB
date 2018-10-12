@@ -45,11 +45,9 @@ func (c EasyDynamoClient) Update(TableObject lambdaconfig.TableInfo) {
 
 	input := updateReflectionHelper(TableObject)
 	fmt.Println(input)
-	response,err :=c.dynamoDbClient.UpdateItem(input)
+	response, err := c.dynamoDbClient.UpdateItem(input)
 	fmt.Println(response)
 	fmt.Println(err)
-
-
 
 }
 
